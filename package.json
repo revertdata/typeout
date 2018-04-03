@@ -1,0 +1,26 @@
+{
+  "name": "07_web_sockets",
+  "version": "1.0.0",
+  "description": "- [ ] &nbsp; Within a new or existing Node.js and Vue.js application, implement one or more features which add interactive, bidirectional client-server communication using the WebSocket protocol. - [ ] &nbsp; For Node.js, use the [Node.js WebSocket library](https://github.com/websockets/ws). - [ ] &nbsp; For Vue.js, use the WebSocket API that is provided by the web browser. - [ ] &nbsp; Deploy your finished application (including both the Node.js server application and the Vue.js client application) to Heroku.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsu-cit-csweb4200/s18-websocket-telepathics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dsu-cit-csweb4200/s18-websocket-telepathics/issues"
+  },
+  "homepage": "https://github.com/dsu-cit-csweb4200/s18-websocket-telepathics#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "passport": "^0.4.0",
+    "ws": "^5.1.1"
+  }
+}
