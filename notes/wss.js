@@ -20,3 +20,14 @@ wss.on('connection', function (ws) {
         });
     });
 });
+
+var sendWord = function() {
+    var words = ["monkey", "pizza", "lasagna", "burrito", "soccer", "bentobox"];
+    var r = Math.random(Math.random() * words.length);
+    var t = var Math.floor(Math.random() * 2000);
+
+    setTimeout(function () {
+        wss.broadcast(words[r]);
+        sendWord();
+    }, t);
+}
