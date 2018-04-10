@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>TYPEOUT</title>
+	<meta charset="UTF-8">
+	<title>TYPEOUT</title>
+	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    
+	<div id="landing-page" v-if="visible">
+		<div id="instructions">
+			<div id="instr-1">
+				<img src="./imgs/temp.png" alt="" id="mini-icon" />
+				<h1>Welcome to Typeout!</h1>
+				<h1>Click the button to begin</h1>
+			</div>
+			<h2>Your name will be...</h2>
+			<h1 id="generated-username" v-on:click="generate" v-bind:style="{color: userColor, borderBottom: '1px solid' + userColor}">{{ userName }}</h1>
+			<button v-on:click="search">Begin</button>
+		</div>
+	</div>
+
+	<div id="loading-container-container" v-if="visible">
+		<div id="loading-container">
+			<div class="loading"></div>
+			<div id="loading-text">searching...</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+	<script src="./script.js"></script>
 </body>
 </html>
