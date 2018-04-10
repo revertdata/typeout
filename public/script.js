@@ -1,4 +1,5 @@
 let apiURL = 'https://localhost:5000'
+var socket = new WebSocket('ws://localhost:5000');
 
 // Generate Username & Color
 const colors = ["#90ee90", "#ffc0cb", "#ffa500", "#add8e6", "#d9f7b4", "#e1c0eb", "#64ebd1"];
@@ -21,15 +22,11 @@ function generateUser() {
 }
 
 function checkForMatch() {
-	// fetch(`${apiURL}/chatsession`, {
-	// 	method: 'get',
-	// 	credentials: 'include'
-	// }).then(function(res) {
-	// 	if (res.status == 200) {
-	// 		loading.visible = false;
-	// 		chat.visible = true;
-	// 	}
-	// });
+	socket.send(JSON.stringify({
+		action: 'ident',
+		username: landing.userName,
+		color: landing.userColor
+	}));
 }
 
 let landing = new Vue({

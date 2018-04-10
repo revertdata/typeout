@@ -48,24 +48,25 @@ wss.on('connection', function (wsclient) {
 		var m = JSON.parse(data);
 		if (m.action == 'ident') {
 			var client = m.username;
-			USERS[client] = {
-				username: username,
-				ws: wsclient,
+			USERS.push({
+				username: m.username,
+				color: m.color,
 				pair: null
-			};
+			});
 		} else if (m.action == 'pair') {
 			var user = players[m.username];
 			findPair(user);
 		}
 
-		console.log("User ", wsclient, " said ", data);
+		console.log(USERS.length, USERS);
+
 	});
 
-	ws.on('close', function(client) {
+	wsclient.on('close', function(client) {
 		USERS.splice(USERS.indexOf(client), 1); // remove one socket from array of clients
 	});
 
-	ws.on('error', function(client) {
+	wsclient.on('error', function(client) {
 		USERS.splice(USERS.indexOf(client), 1); // remove one socket from array if error
 	});
 
