@@ -27,12 +27,20 @@ function checkForMatch() {
 		username: landing.userName,
 		color: landing.userColor
 	}));
+
+	socket.onmessage = function(event) {
+		data = JSON.parse(event.data);
+		if (data.status == 201) {
+			loading.visible = false;
+			chat.visible = true;
+		}
+	}
 }
 
 let landing = new Vue({
 	el: '#landing-page',
 	data: {
-		visible: false,
+		visible: true,
 		userName: '',
 		userColor: colors[Math.floor(Math.random() * colors.length)]
 	},
@@ -61,7 +69,7 @@ let loading = new Vue({
 let chat = new Vue({
 	el: '#chat-page',
 	data: {
-		visible: true,
+		visible: false,
 		user: {
 			username: ''
 		},

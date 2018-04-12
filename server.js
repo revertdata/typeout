@@ -37,7 +37,17 @@ function findPair(user) {
 
 			// startChat(user, pair);
 			console.log("Paired " + user.username + " with " + pair.username);
-			return true;
+			USERS[user.username].wsclient.send(JSON.stringify({
+				me: user.username,
+				pair: user.pair,
+				status: 201
+			}));
+
+			pair.wsclient.send(JSON.stringify({
+				me: pair.username,
+				pair: pair.pair,
+				status: 201
+			}));
 		}
 	}
 }
@@ -54,7 +64,8 @@ wss.on('connection', function (wsclient) {
 				username: m.username,
 				color: m.color,
 				pair: null,
-				pendingMessages: []
+				pendingMessages: [],
+				wsclient: wsclient
 			};
 			findPair(USERS[user]);
 
