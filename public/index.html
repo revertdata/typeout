@@ -53,15 +53,15 @@
 				<div id="chat-box">
 					<div id="chat-log">
 
-						<template id="message-template">
+						<div v-for="msg in messages">
 							<div class="client-post">
 								<div class="post-log">
-									<div class="message"></div>
-									<span class="timestamp"></span>
+									<div class="message">{{ msg.message }}</div>
+									<span class="timestamp">{{ msg.time }}</span>
 								</div>
 								<img src="./imgs/icon-temp.jpg" alt="" class="icon">
 							</div>
-						</template>
+						</div>
 
 					</div>
 					<textarea v-model="message"></textarea>

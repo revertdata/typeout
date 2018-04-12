@@ -19,10 +19,21 @@ var wss = new WebSocket.Server({ server: server });
 
 var USERS = {};
 
-function addMessage(message, user, pair) {
+function addMessage(data) {
+
+	var pair = data.to;
+	var user = data.from;
+
 	// check readystate or else it'll crash
 	if (USERS[pair].readyState == USERS[user].OPEN) {
-		USERS[pair].send(message);
+		USERS[pair].wsclient.send(JSON.stringify({
+			action: 'message',
+			status: 201,
+			time: data.time,
+			message: data.msg,
+			from: user,
+			to: pair
+		}));
 	}
 }
 
@@ -38,15 +49,17 @@ function findPair(user) {
 			// startChat(user, pair);
 			console.log("Paired " + user.username + " with " + pair.username);
 			USERS[user.username].wsclient.send(JSON.stringify({
+				action: 'paired',
+				status: 201,
 				me: user.username,
-				pair: user.pair,
-				status: 201
+				pair: user.pair
 			}));
 
 			pair.wsclient.send(JSON.stringify({
+				action: 'paired',
+				status: 201,
 				me: pair.username,
-				pair: pair.pair,
-				status: 201
+				pair: pair.pair
 			}));
 		}
 	}
@@ -71,7 +84,11 @@ wss.on('connection', function (wsclient) {
 
 		} else if (m.action == 'pair') {
 			var user = USERS[m.username];
+			user.pair = '';
 			findPair(user);
+		} else if (m.action == 'sendmsg') {
+			console.log(m);
+			addMessage(m);
 		}
 
 	});

@@ -21,22 +21,54 @@ function generateUser() {
 	});
 }
 
+function setDate() {
+	d = new Date()
+	h = d.getHours();
+	m = d.getMinutes();
+	return `${((h < 10)?"0":"") + h}:${((m < 10)?"0":"") + m}`;
+}
+
+function displayMessage(data) {
+	chat.messages.push(data);
+	console.log(chat.messages);
+}
+
+socket.onmessage = function(event) {
+	data = JSON.parse(event.data);
+	if (data.status == 201) {
+
+		if (data.action == 'paired') {
+			loading.visible = false;
+			chat.visible = true;
+
+			chat.user.username = data.me;
+			chat.pair.username = data.pair;
+		} else if (data.action == 'message') {
+			displayMessage(data);
+		}
+	}
+}
+
 function checkForMatch() {
 	socket.send(JSON.stringify({
 		action: 'ident',
 		username: landing.userName,
 		color: landing.userColor
 	}));
+}
 
-	socket.onmessage = function(event) {
-		data = JSON.parse(event.data);
-		if (data.status == 201) {
-			loading.visible = false;
-			chat.visible = true;
+function sendMessage() {
+	if (chat.message != '') {
+		data = {
+			action: 'sendmsg',
+			time: setDate(),
+			to: chat.pair.username,
+			from: chat.user.username,
+			msg: chat.message
+		};
 
-			chat.user.username = data.me;
-			chat.pair.username = data.pair;
-		}
+		displayMessage(data);
+		socket.send(JSON.stringify(data));
 	}
 }
 
@@ -79,16 +111,18 @@ let chat = new Vue({
 		pair: {
 			username: ''
 		},
-		message: ''
+		message: '',
+		messages: []
 	},
 	methods: {
 		chat: function() {
-			// sendMessage()
-			console.log(this.message);
+			sendMessage(this.message);
+			// console.log(this.message);
 			this.message = '';
 		},
 		end: function() {
 			// TODO
+			this.message = '';
 		},
 		restart: function() {
 			socket.close();
