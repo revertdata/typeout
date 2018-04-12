@@ -33,6 +33,9 @@ function checkForMatch() {
 		if (data.status == 201) {
 			loading.visible = false;
 			chat.visible = true;
+
+			chat.user = data.me;
+			chat.pair = data.pair;
 		}
 	}
 }

@@ -77,12 +77,21 @@ wss.on('connection', function (wsclient) {
 	});
 
 	wsclient.on('close', function(client) {
-		console.log(client);
-		// USERS.splice(USERS.indexOf(client), 1); // remove one socket from array of clients
+		for (var user in USERS) {
+			if (USERS[user].wsclient == wsclient) {
+				delete USERS.user;
+				console.log(USERS[user].username, 'disconnected.');
+			}
+		}
 	});
 
 	wsclient.on('error', function(client) {
-		// USERS.splice(USERS.indexOf(client), 1); // remove one socket from array if error
+		for (var user in USERS) {
+			if (USERS[user].wsclient == wsclient) {
+				console.log('error with', USERS[user].username, '. Forced to disconnect.');
+				delete USERS.user;
+			}
+		}
 	});
 
 });
