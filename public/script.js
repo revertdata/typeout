@@ -34,8 +34,8 @@ function checkForMatch() {
 			loading.visible = false;
 			chat.visible = true;
 
-			chat.user = data.me;
-			chat.pair = data.pair;
+			chat.user.username = data.me;
+			chat.pair.username = data.pair;
 		}
 	}
 }
@@ -86,6 +86,15 @@ let chat = new Vue({
 			// sendMessage()
 			console.log(this.message);
 			this.message = '';
+		},
+		end: function() {
+			// TODO
+		},
+		restart: function() {
+			socket.close();
+			this.pair.username = '';
+			this.visible = false;
+			landing.visible = true;
 		}
 	}
 });

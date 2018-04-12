@@ -37,15 +37,18 @@
 					<div id="client1" class="user">
 						<img src="./imgs/icon-temp.jpg" alt="user icon" id="generated-icon" class="icon">
 						<br>
-						<span id="generated-username">{{ user.username }}</span>!
+						<span id="generated-username">{{ user.username }}</span>
 						<br>
 					</div>
+					<span style="opacity: 0.5">&amp;</span>
 					<div id="client2" class="user">
 						<img src="./imgs/icon-temp2.jpg" alt="pair icon" id="client2-icon" class="icon">
 						<br>
-						<span id="client2-username">{{ pair.username }}</span>!
+						<span id="client2-username">{{ pair.username }}</span>
 						<br>
 					</div>
+					<button v-on:click="end">end chat</button>
+					<button v-on:click="restart">start another chat?</button>
 				</div>
 				<div id="chat-box">
 					<div id="chat-log">
