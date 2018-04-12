@@ -16,30 +16,34 @@ var server = app.listen(process.env.PORT || 5000, function() {
 // ===========================
 
 var wss = new WebSocket.Server({ server: server });
-var USERS = [];
 
-function sendAll(message) {
-	for (var i=0; i < USERS.length; i++) {
-		// check readystate or else it'll crash
-		if (USERS[i].readyState == USERS[0].OPEN) {
-			USERS[i].send(message);
-		}
-	}
-}
+var USERS = {};
+var CLIENT_SESSIONS = {};
+var CHAT_SESSIONS = {};
+
+// function sendAll(message) {
+// 	for (var i=0; i < USERS.length; i++) {
+// 		// check readystate or else it'll crash
+// 		if (USERS[i].readyState == USERS[0].OPEN) {
+// 			USERS[i].send(message);
+// 		}
+// 	}
+// }
 
 function findPair(user) {
-	USERS.forEach(function (pair) {
-		if (pair.pair == null && pair.username != user.username) {
+	for (var client in USERS) {
+		var pair = USERS[client];
+
+		if (user.ID != pair.ID && user.pair == null && pair.pair == null) {
+
+			user.pair = pair.username;
 			pair.pair = user.username;
-			user.username = pair.username;
-			console.log("Paired" + user.username + " with " + pair.username);
 
-			return;
+			// startChat(user, pair);
+			console.log("Paired " + user.username + " with " + pair.username);
+
 		}
-
-		// TODO if no pair found...
-		console.log("No empty pairs.  Please try again letter.");
-	})
+	}
 }
 
 wss.on('connection', function (wsclient) {
@@ -47,27 +51,31 @@ wss.on('connection', function (wsclient) {
 	wsclient.on('message', function (data) {
 		var m = JSON.parse(data);
 		if (m.action == 'ident') {
-			var client = m.username;
-			USERS.push({
+			var id = Date.now();
+			var user = m.username;
+			USERS[user] = {
+				ID: id,
 				username: m.username,
 				color: m.color,
-				pair: null
-			});
+				pair: null,
+				pendingMessages: []
+			};
+			findPair(USERS[user]);
+
 		} else if (m.action == 'pair') {
-			var user = players[m.username];
+			var user = USERS[m.username];
 			findPair(user);
 		}
-
-		console.log(USERS.length, USERS);
 
 	});
 
 	wsclient.on('close', function(client) {
-		USERS.splice(USERS.indexOf(client), 1); // remove one socket from array of clients
+		console.log(client);
+		// USERS.splice(USERS.indexOf(client), 1); // remove one socket from array of clients
 	});
 
 	wsclient.on('error', function(client) {
-		USERS.splice(USERS.indexOf(client), 1); // remove one socket from array if error
+		// USERS.splice(USERS.indexOf(client), 1); // remove one socket from array if error
 	});
 
 });
