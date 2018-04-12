@@ -18,17 +18,13 @@ var server = app.listen(process.env.PORT || 5000, function() {
 var wss = new WebSocket.Server({ server: server });
 
 var USERS = {};
-var CLIENT_SESSIONS = {};
-var CHAT_SESSIONS = {};
 
-// function sendAll(message) {
-// 	for (var i=0; i < USERS.length; i++) {
-// 		// check readystate or else it'll crash
-// 		if (USERS[i].readyState == USERS[0].OPEN) {
-// 			USERS[i].send(message);
-// 		}
-// 	}
-// }
+function addMessage(message, user, pair) {
+	// check readystate or else it'll crash
+	if (USERS[pair].readyState == USERS[user].OPEN) {
+		USERS[pair].send(message);
+	}
+}
 
 function findPair(user) {
 	for (var client in USERS) {
@@ -41,7 +37,7 @@ function findPair(user) {
 
 			// startChat(user, pair);
 			console.log("Paired " + user.username + " with " + pair.username);
-
+			return true;
 		}
 	}
 }

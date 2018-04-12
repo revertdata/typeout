@@ -32,7 +32,7 @@ function checkForMatch() {
 let landing = new Vue({
 	el: '#landing-page',
 	data: {
-		visible: true,
+		visible: false,
 		userName: '',
 		userColor: colors[Math.floor(Math.random() * colors.length)]
 	},
@@ -55,5 +55,26 @@ let loading = new Vue({
 	el: '#loading-container-container',
 	data: {
 		visible: false
+	}
+});
+
+let chat = new Vue({
+	el: '#chat-page',
+	data: {
+		visible: true,
+		user: {
+			username: ''
+		},
+		pair: {
+			username: ''
+		},
+		message: ''
+	},
+	methods: {
+		chat: function() {
+			// sendMessage()
+			console.log(this.message);
+			this.message = '';
+		}
 	}
 });

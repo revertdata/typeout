@@ -26,6 +26,48 @@
 		</div>
 	</div>
 
+	<div id="chat-page" v-if="visible">
+		<img src="./imgs/temp.png" id="icon" />
+		<div id="chat-window">
+			<div id="header">
+				<h1>TYPEOUT</h1>
+			</div>
+			<div id="chat-body">
+				<div id="sidebar">
+					<div id="client1" class="user">
+						<img src="./imgs/icon-temp.jpg" alt="user icon" id="generated-icon" class="icon">
+						<br>
+						<span id="generated-username">{{ user.username }}</span>!
+						<br>
+					</div>
+					<div id="client2" class="user">
+						<img src="./imgs/icon-temp2.jpg" alt="pair icon" id="client2-icon" class="icon">
+						<br>
+						<span id="client2-username">{{ pair.username }}</span>!
+						<br>
+					</div>
+				</div>
+				<div id="chat-box">
+					<div id="chat-log">
+
+						<template id="message-template">
+							<div class="client-post">
+								<div class="post-log">
+									<div class="message"></div>
+									<span class="timestamp"></span>
+								</div>
+								<img src="./imgs/icon-temp.jpg" alt="" class="icon">
+							</div>
+						</template>
+
+					</div>
+					<textarea v-model="message"></textarea>
+					<button v-on:click="chat">send</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 	<script src="./script.js"></script>
 </body>

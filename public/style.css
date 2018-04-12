@@ -2,11 +2,7 @@
 /* BASIC STYLING */
 /* ============= */
 
-@font-face {
-  font-family: "San Francisco";
-  font-weight: 400;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
-}
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display');
 
 *, *:before, *:after {
 	margin: 0;
@@ -20,7 +16,7 @@ html {
 
 	overflow: hidden;
 
-	font-family: 'San Francisco', Helvetica, Arial, san-serif;
+	font-family: 'Playfair Display', serif;
 }
 
 a {
@@ -262,7 +258,7 @@ button:focus {
 	margin-bottom: 1%;
 }
 
-#wrapper {
+#chat-page {
 	position: absolute;
 	display: flex;
 	justify-content: center;
@@ -291,7 +287,7 @@ button:focus {
 	align-content: center;
 	align-items: center;
 
-	font-family: 'Rammetto One', cursive;
+	font-family: 'Playfair Display', serif;
 	font-weight: lighter;
 	font-size: 0.7em;
 	letter-spacing: 2px;
