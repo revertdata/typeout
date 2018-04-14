@@ -1,5 +1,5 @@
-let apiURL = 'https://localhost:5000';
-var socket = new WebSocket('ws://localhost:5000');
+var HOST = location.origin.replace(/^http/, 'ws');
+var socket = new WebSocket(HOST);
 
 // Generate Username & Color
 const colors = ["#90ee90", "#ffc0cb", "#ffa500", "#add8e6", "#d9f7b4", "#e1c0eb", "#64ebd1"];
