@@ -449,6 +449,18 @@ button:focus {
 	outline: 0;
 }
 
+#chat-box textarea.disabled {
+	opacity: 0.5;
+}
+
+#chat-box>span {
+    padding-top: 25px;
+    width: 90%;
+    display: block;
+    text-align: center;
+    font-size: 0.8em;
+}
+
 #chat-box button {
 	margin: 1.6%;
 	width: 10%;
@@ -456,4 +468,9 @@ button:focus {
 	position: absolute;
 	bottom: 0;
 	right: 0;
+}
+
+#chat-box button.disabled {
+	cursor: not-allowed;
+	opacity: 0.5;
 }

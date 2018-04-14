@@ -1,4 +1,4 @@
-let apiURL = 'https://localhost:5000'
+let apiURL = 'https://localhost:5000';
 var socket = new WebSocket('ws://localhost:5000');
 
 // Generate Username & Color
@@ -30,12 +30,11 @@ function setDate() {
 
 function displayMessage(data) {
 	chat.messages.push(data);
-	console.log(chat.messages);
 }
 
 socket.onmessage = function(event) {
 	data = JSON.parse(event.data);
-	if (data.status == 201) {
+	if (data.status == 200) {
 
 		if (data.action == 'paired') {
 			loading.visible = false;
@@ -47,11 +46,18 @@ socket.onmessage = function(event) {
 			chat.pair.color = data.pairColor;
 		} else if (data.action == 'message') {
 			displayMessage(data);
+		} else if (data.action == 'disconnected') {
+			chat.ended = data.message.message;
 		}
 	}
 }
 
 function checkForMatch() {
+	chat.ended = {
+		status: false,
+		class: 'enabled',
+		message: ''
+	};
 	socket.send(JSON.stringify({
 		action: 'ident',
 		username: landing.userName,
@@ -72,6 +78,17 @@ function sendMessage() {
 		displayMessage(data);
 		socket.send(JSON.stringify(data));
 	}
+}
+
+function disconnect() {
+	data = {
+		action: 'disconnect',
+		message: chat.ended,
+		user: chat.user.username,
+		pair: chat.pair.username
+	}
+
+	socket.send(JSON.stringify(data));
 }
 
 let landing = new Vue({
@@ -116,23 +133,35 @@ let chat = new Vue({
 			color: ''
 		},
 		message: '',
-		messages: []
+		messages: [],
+		ended: {
+			status: false,
+			class: 'enabled',
+			message: ''
+		}
 	},
 	methods: {
 		chat: function() {
 			sendMessage(this.message);
-			// console.log(this.message);
 			this.message = '';
 		},
 		end: function() {
 			// TODO
+			this.ended.status = true;
+			this.ended.class = 'disabled';
+			this.ended.message = 'this chat has been disconnected.';
 			this.message = '';
+			disconnect();
 		},
 		restart: function() {
-			socket.close();
 			this.pair.username = '';
+			this.messages = [];
 			this.visible = false;
 			landing.visible = true;
 		}
+	},
+	created: function() {
+		this.ended.class = 'enabled';
+		this.ended.message = '';
 	}
 });

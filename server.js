@@ -28,7 +28,7 @@ function addMessage(data) {
 	if (USERS[pair].readyState == USERS[user].OPEN) {
 		USERS[pair].wsclient.send(JSON.stringify({
 			action: 'message',
-			status: 201,
+			status: 200,
 			time: data.time,
 			message: data.message,
 			from: user,
@@ -50,7 +50,7 @@ function findPair(user) {
 			console.log("Paired " + user.username + " with " + pair.username);
 			USERS[user.username].wsclient.send(JSON.stringify({
 				action: 'paired',
-				status: 201,
+				status: 200,
 				me: user.username,
 				userColor: user.color,
 				pair: user.pair,
@@ -59,7 +59,7 @@ function findPair(user) {
 
 			pair.wsclient.send(JSON.stringify({
 				action: 'paired',
-				status: 201,
+				status: 200,
 				me: pair.username,
 				userColor: pair.color,
 				pair: pair.pair,
@@ -67,6 +67,16 @@ function findPair(user) {
 			}));
 		}
 	}
+}
+
+function disconnect(data) {
+	USERS[data.pair].wsclient.send(JSON.stringify({
+		action: 'disconnected',
+		status: 200,
+		message: data
+	}));
+
+	console.log(data.user + ' and ' + data.pair + ' disconnected.');
 }
 
 wss.on('connection', function (wsclient) {
@@ -91,6 +101,8 @@ wss.on('connection', function (wsclient) {
 			findPair(user);
 		} else if (m.action == 'sendmsg') {
 			addMessage(m);
+		} else if (m.action == 'disconnect') {
+			disconnect(m);
 		}
 
 	});
@@ -99,7 +111,6 @@ wss.on('connection', function (wsclient) {
 		for (var user in USERS) {
 			if (USERS[user].wsclient == wsclient) {
 				delete USERS.user;
-				console.log(USERS[user].username, 'disconnected.');
 			}
 		}
 	});

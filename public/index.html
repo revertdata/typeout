@@ -47,7 +47,7 @@
 						<span id="client2-username">{{ pair.username }}</span>
 						<br>
 					</div>
-					<button v-on:click="end">end chat</button>
+					<button v-on:click="end" v-if="!ended.status">end chat</button>
 					<button v-on:click="restart">start another chat?</button>
 				</div>
 				<div id="chat-box">
@@ -64,8 +64,9 @@
 						</div>
 
 					</div>
-					<textarea v-model="message"></textarea>
-					<button v-on:click="chat">send</button>
+					<textarea v-model="message" v-bind:disabled="ended.status" v-bind:class="ended.class"></textarea>
+					<span v-if="ended.status">{{ ended.message }}</span>
+					<button v-on:click="chat" v-bind:class="ended.class">send</button>
 				</div>
 			</div>
 		</div>
