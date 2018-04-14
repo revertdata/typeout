@@ -40,12 +40,25 @@ socket.onmessage = function(event) {
 			loading.visible = false;
 			chat.visible = true;
 
-			chat.user.username = data.username;
-			chat.user.ID = data.me,
-			chat.user.color = data.userColor;
-			chat.pair.username = data.pairname;
-			chat.pair.ID = data.pair;
-			chat.pair.color = data.pairColor;
+			chat.user = {
+				ID: data.me,
+				username: data.username,
+				color: data.userColor
+			};
+			chat.pair = {
+				ID: data.pair,
+				username: data.pairname,
+				color: data.pairColor
+			};
+			chat.message = '';
+			chat.messages = [];
+			chat.ended = {
+				status: false,
+				class: 'enabled',
+				message: ''
+			};
+
+
 		} else if (data.action == 'message') {
 			displayMessage(data);
 		} else if (data.action == 'disconnected') {
@@ -60,6 +73,7 @@ function checkForMatch() {
 		class: 'enabled',
 		message: ''
 	};
+
 	socket.send(JSON.stringify({
 		action: 'ident',
 		username: landing.userName,
@@ -150,22 +164,25 @@ let chat = new Vue({
 			this.message = '';
 		},
 		end: function() {
-			// TODO
-			this.ended.status = true;
-			this.ended.class = 'disabled';
-			this.ended.message = 'this chat has been disconnected.';
-			this.message = '';
+			this.ended = {
+				status: true,
+				class: 'disabled',
+				message: this.user.username + " disconnected the chat."
+			}
+
 			disconnect();
 		},
 		restart: function() {
-			this.pair.ID = '';
-			this.messages = [];
+			this.ended = {
+				status: true,
+				class: 'disabled',
+				message: this.user.username + " has left the chat."
+			}
+
+			disconnect();
+
 			this.visible = false;
 			landing.visible = true;
 		}
-	},
-	created: function() {
-		this.ended.class = 'enabled';
-		this.ended.message = '';
 	}
 });
