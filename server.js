@@ -43,26 +43,30 @@ function findPair(user) {
 
 		if (user.ID != pair.ID && user.pair == null && pair.pair == null) {
 
-			user.pair = pair.username;
-			pair.pair = user.username;
+			user.pair = pair.ID;
+			pair.pair = user.ID;
 
 			// startChat(user, pair);
 			console.log("Paired " + user.username + " with " + pair.username);
-			USERS[user.username].wsclient.send(JSON.stringify({
+			USERS[user.ID].wsclient.send(JSON.stringify({
 				action: 'paired',
 				status: 200,
-				me: user.username,
+				me: user.ID,
+				username: user.username,
 				userColor: user.color,
 				pair: user.pair,
+				pairname: USERS[pair.ID].username,
 				pairColor: pair.color
 			}));
 
 			pair.wsclient.send(JSON.stringify({
 				action: 'paired',
 				status: 200,
-				me: pair.username,
+				me: pair.ID,
+				username: pair.username,
 				userColor: pair.color,
 				pair: pair.pair,
+				pairname: USERS[user.ID].username,
 				pairColor: user.color
 			}));
 		}
@@ -76,7 +80,7 @@ function disconnect(data) {
 		message: data
 	}));
 
-	console.log(data.user + ' and ' + data.pair + ' disconnected.');
+	console.log(USERS[data.user].username + ' and ' + USERS[data.pair].username + ' disconnected.');
 }
 
 wss.on('connection', function (wsclient) {
@@ -84,10 +88,9 @@ wss.on('connection', function (wsclient) {
 	wsclient.on('message', function (data) {
 		var m = JSON.parse(data);
 		if (m.action == 'ident') {
-			var id = Date.now();
-			var user = m.username;
+			var user = Date.now();
 			USERS[user] = {
-				ID: id,
+				ID: user,
 				username: m.username,
 				color: m.color,
 				pair: null,
@@ -96,8 +99,8 @@ wss.on('connection', function (wsclient) {
 			findPair(USERS[user]);
 
 		} else if (m.action == 'pair') {
-			var user = USERS[m.username];
-			user.pair = '';
+			var user = USERS[m.ID];
+			user.pair = null;
 			findPair(user);
 		} else if (m.action == 'sendmsg') {
 			addMessage(m);

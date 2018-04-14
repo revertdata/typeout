@@ -40,9 +40,11 @@ socket.onmessage = function(event) {
 			loading.visible = false;
 			chat.visible = true;
 
-			chat.user.username = data.me;
+			chat.user.username = data.username;
+			chat.user.ID = data.me,
 			chat.user.color = data.userColor;
-			chat.pair.username = data.pair;
+			chat.pair.username = data.pairname;
+			chat.pair.ID = data.pair;
 			chat.pair.color = data.pairColor;
 		} else if (data.action == 'message') {
 			displayMessage(data);
@@ -70,8 +72,8 @@ function sendMessage() {
 		data = {
 			action: 'sendmsg',
 			time: setDate(),
-			to: chat.pair.username,
-			from: chat.user.username,
+			to: chat.pair.ID,
+			from: chat.user.ID,
 			message: chat.message
 		};
 
@@ -84,8 +86,8 @@ function disconnect() {
 	data = {
 		action: 'disconnect',
 		message: chat.ended,
-		user: chat.user.username,
-		pair: chat.pair.username
+		user: chat.user.ID,
+		pair: chat.pair.ID
 	}
 
 	socket.send(JSON.stringify(data));
@@ -125,10 +127,12 @@ let chat = new Vue({
 	data: {
 		visible: false,
 		user: {
+			ID: '',
 			username: '',
 			color: ''
 		},
 		pair: {
+			ID: '',
 			username: '',
 			color: ''
 		},
@@ -154,7 +158,7 @@ let chat = new Vue({
 			disconnect();
 		},
 		restart: function() {
-			this.pair.username = '';
+			this.pair.ID = '';
 			this.messages = [];
 			this.visible = false;
 			landing.visible = true;

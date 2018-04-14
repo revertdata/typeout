@@ -54,12 +54,12 @@
 					<div id="chat-log">
 
 						<div v-for="msg in messages">
-							<div class="client-post" v-bind:class="[msg.from == user.username ? 'client1' : 'client2']">
-								<div class="post-log" v-bind:class="[msg.from == user.username ? 'client1' : 'client2']">
-									<div class="message" v-bind:style="[msg.from == user.username ? {borderColor: user.color, color: user.color} : {borderColor: pair.color, color: pair.color}]">{{ msg.message }}</div>
+							<div class="client-post" v-bind:class="[msg.from == user.ID ? 'client1' : 'client2']">
+								<div class="post-log" v-bind:class="[msg.from == user.ID ? 'client1' : 'client2']">
+									<div class="message" v-bind:style="[msg.from == user.ID ? {borderColor: user.color, color: user.color} : {borderColor: pair.color, color: pair.color}]">{{ msg.message }}</div>
 									<span class="timestamp">{{ msg.time }}</span>
 								</div>
-								<img v-bind:src="[msg.from == user.username ? './imgs/icon-temp.jpg' : './imgs/icon-temp2.jpg']" alt="icon" class="icon">
+								<img v-bind:src="[msg.from == user.ID ? './imgs/icon-temp.jpg' : './imgs/icon-temp2.jpg']" alt="icon" class="icon">
 							</div>
 						</div>
 
