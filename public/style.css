@@ -367,9 +367,13 @@ button:focus {
 
 #chat-box .client-post {
 	display: flex;
-	flex-direction: row; /* will change to row-reverse for client2 */
+	flex-direction: row;
 	justify-content: flex-end;
 	margin-bottom: 5px;
+}
+
+#chat-box .client-post.client2 {
+	flex-direction: row-reverse;
 }
 
 #chat-box .client-post .icon {
@@ -385,7 +389,11 @@ button:focus {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	align-items: flex-end; /* will change to flex-start for client2 */
+	align-items: flex-end;
+}
+
+#chat-box .client-post .post-log.client2 {
+	align-items: flex-start;
 }
 
 #chat-box .client-post .post-log .username {
@@ -403,8 +411,8 @@ button:focus {
 	overflow-wrap: break-word;
 	max-width: 100%;
 
-	opacity: 0;
-	transform: translateX(0px) scale(0.2);
+	/*opacity: 0;*/
+	/*transform: translateX(0px) scale(0.2);*/
 	transition: margin-bottom 200ms, max-height 500ms, opacity 100ms, transform 250ms;
 	transition-timing-function: ease-out;
 }

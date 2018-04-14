@@ -42,7 +42,9 @@ socket.onmessage = function(event) {
 			chat.visible = true;
 
 			chat.user.username = data.me;
+			chat.user.color = data.userColor;
 			chat.pair.username = data.pair;
+			chat.pair.color = data.pairColor;
 		} else if (data.action == 'message') {
 			displayMessage(data);
 		}
@@ -64,7 +66,7 @@ function sendMessage() {
 			time: setDate(),
 			to: chat.pair.username,
 			from: chat.user.username,
-			msg: chat.message
+			message: chat.message
 		};
 
 		displayMessage(data);
@@ -106,10 +108,12 @@ let chat = new Vue({
 	data: {
 		visible: false,
 		user: {
-			username: ''
+			username: '',
+			color: ''
 		},
 		pair: {
-			username: ''
+			username: '',
+			color: ''
 		},
 		message: '',
 		messages: []

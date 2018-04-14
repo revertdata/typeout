@@ -30,7 +30,7 @@ function addMessage(data) {
 			action: 'message',
 			status: 201,
 			time: data.time,
-			message: data.msg,
+			message: data.message,
 			from: user,
 			to: pair
 		}));
@@ -52,14 +52,18 @@ function findPair(user) {
 				action: 'paired',
 				status: 201,
 				me: user.username,
-				pair: user.pair
+				userColor: user.color,
+				pair: user.pair,
+				pairColor: pair.color
 			}));
 
 			pair.wsclient.send(JSON.stringify({
 				action: 'paired',
 				status: 201,
 				me: pair.username,
-				pair: pair.pair
+				userColor: pair.color,
+				pair: pair.pair,
+				pairColor: user.color
 			}));
 		}
 	}
@@ -77,7 +81,6 @@ wss.on('connection', function (wsclient) {
 				username: m.username,
 				color: m.color,
 				pair: null,
-				pendingMessages: [],
 				wsclient: wsclient
 			};
 			findPair(USERS[user]);
@@ -87,7 +90,6 @@ wss.on('connection', function (wsclient) {
 			user.pair = '';
 			findPair(user);
 		} else if (m.action == 'sendmsg') {
-			console.log(m);
 			addMessage(m);
 		}
 
@@ -105,8 +107,8 @@ wss.on('connection', function (wsclient) {
 	wsclient.on('error', function(client) {
 		for (var user in USERS) {
 			if (USERS[user].wsclient == wsclient) {
-				console.log('error with', USERS[user].username, '. Forced to disconnect.');
 				delete USERS.user;
+				console.log('error with', USERS[user].username, '. Forced to disconnect.');
 			}
 		}
 	});
