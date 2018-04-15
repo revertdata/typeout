@@ -4,6 +4,10 @@
 
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display');
 
+@-ms-viewport{
+	width: device-width;
+}
+
 *, *:before, *:after {
 	margin: 0;
 	padding: 0;
@@ -138,7 +142,7 @@ button:focus {
 	border-radius: 100%;
 }
 
-.loading-container { 
+.loading-container {
 	margin: 40px auto;
 	cursor: progress;
 }
@@ -473,4 +477,70 @@ button:focus {
 #chat-box button.disabled {
 	cursor: not-allowed;
 	opacity: 0.5;
+}
+
+/* =============== */
+/* MOBILE FRIENDLY */
+/* =============== */
+
+@media screen and (max-width: 600px) {
+	#icon {
+		display: none;
+	}
+
+	#landing-page #instructions {
+		width: auto;
+		height: auto;
+	}
+
+	#chat-window {
+		width: 100%;
+		height: 90%;
+		border: none;
+	}
+
+	#chat-body {
+		flex-direction: column;
+	}
+
+	#sidebar {
+		width: 100%;
+		height: auto;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+
+		border: none;
+	}
+
+	#sidebar .user {
+		margin: auto;
+		font-size: 0.7em;
+	}
+
+	#sidebar button {
+		margin: 0 5px;
+		padding: 10px;
+		font-size: 0.5em;
+	}
+
+	#chat-box {
+		width: 100%;
+		height: 85%;
+	}
+
+	#chat-box #chat-log {
+		padding: 20px 10px;
+	}
+
+	#chat-box button {
+		bottom: 5px;
+	}
+
+	#chat-box>span {
+		padding-top: 10px;
+		font-size: 1em;
+	}
 }
