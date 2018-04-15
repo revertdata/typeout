@@ -25,7 +25,7 @@ function addMessage(data) {
 	var user = data.from;
 
 	// check readystate or else it'll crash
-	if (USERS[pair].readyState == USERS[user].OPEN) {
+	if (USERS[pair].wsclient.readyState == USERS[user].wsclient.OPEN) {
 		USERS[pair].wsclient.send(JSON.stringify({
 			action: 'message',
 			status: 200,
@@ -38,49 +38,57 @@ function addMessage(data) {
 }
 
 function findPair(user) {
-	for (var client in USERS) {
-		var pair = USERS[client];
 
-		if (user.ID != pair.ID && user.pair == null && pair.pair == null) {
+	// check readystate or else it'll crash
+	if (USERS[user.ID].wsclient.readyState == USERS[user.ID].wsclient.OPEN) {
 
-			user.pair = pair.ID;
-			pair.pair = user.ID;
+		for (var client in USERS) {
+			var pair = USERS[client];
 
-			// startChat(user, pair);
-			console.log("Paired " + user.username + " with " + pair.username);
-			USERS[user.ID].wsclient.send(JSON.stringify({
-				action: 'paired',
-				status: 200,
-				me: user.ID,
-				username: user.username,
-				userColor: user.color,
-				pair: user.pair,
-				pairname: USERS[pair.ID].username,
-				pairColor: pair.color
-			}));
+			if (user.ID != pair.ID && user.pair == null && pair.pair == null) {
 
-			pair.wsclient.send(JSON.stringify({
-				action: 'paired',
-				status: 200,
-				me: pair.ID,
-				username: pair.username,
-				userColor: pair.color,
-				pair: pair.pair,
-				pairname: USERS[user.ID].username,
-				pairColor: user.color
-			}));
+				user.pair = pair.ID;
+				pair.pair = user.ID;
+
+				// startChat(user, pair);
+				console.log("Paired " + user.username + " with " + pair.username);
+				USERS[user.ID].wsclient.send(JSON.stringify({
+					action: 'paired',
+					status: 200,
+					me: user.ID,
+					username: user.username,
+					userColor: user.color,
+					pair: user.pair,
+					pairname: USERS[pair.ID].username,
+					pairColor: pair.color
+				}));
+
+				pair.wsclient.send(JSON.stringify({
+					action: 'paired',
+					status: 200,
+					me: pair.ID,
+					username: pair.username,
+					userColor: pair.color,
+					pair: pair.pair,
+					pairname: USERS[user.ID].username,
+					pairColor: user.color
+				}));
+			}
 		}
 	}
 }
 
 function disconnect(data) {
-	USERS[data.pair].wsclient.send(JSON.stringify({
-		action: 'disconnected',
-		status: 200,
-		message: data
-	}));
+	// check readystate or else it'll crash
+	if (USERS[data.pair].wsclient.readyState == USERS[data.user].wsclient.OPEN) {
+		USERS[data.pair].wsclient.send(JSON.stringify({
+			action: 'disconnected',
+			status: 200,
+			message: data
+		}));
 
-	console.log(USERS[data.user].username + ' and ' + USERS[data.pair].username + ' disconnected.');
+		console.log(USERS[data.user].username + ' and ' + USERS[data.pair].username + ' disconnected.');
+	}
 }
 
 wss.on('connection', function (wsclient) {
@@ -113,6 +121,16 @@ wss.on('connection', function (wsclient) {
 	wsclient.on('close', function(client) {
 		for (var user in USERS) {
 			if (USERS[user].wsclient == wsclient) {
+				disconnect({
+					action: 'disconnect',
+					message: {
+						status: true,
+						class: 'disabled',
+						message: USERS[user].username + " has left the chat."
+					},
+					user: user,
+					pair: USERS[USERS[user].pair].ID
+				});
 				delete USERS.user;
 			}
 		}
