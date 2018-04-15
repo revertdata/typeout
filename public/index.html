@@ -37,7 +37,7 @@
 					<div id="client1" class="user">
 						<img src="./imgs/icon-temp.jpg" alt="user icon" id="generated-icon" class="icon">
 						<br>
-						<span id="generated-username">{{ user.username }}</span>
+						<span id="generated-username" v-bind:style="{color: user.color, borderColor: user.color}">{{ user.username }}</span>
 						<br>
 					</div>
 					<span style="opacity: 0.5">&amp;</span>
@@ -64,7 +64,7 @@
 						</div>
 
 					</div>
-					<textarea v-model="message" v-bind:disabled="ended.status" v-bind:class="ended.class"></textarea>
+					<textarea v-model="message" v-bind:disabled="ended.status" v-bind:class="ended.class" v-on:keyup.enter="chat"></textarea>
 					<span v-if="ended.status">{{ ended.message }}</span>
 					<button v-on:click="chat" v-bind:class="ended.class">send</button>
 				</div>

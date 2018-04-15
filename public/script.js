@@ -160,8 +160,10 @@ let chat = new Vue({
 	},
 	methods: {
 		chat: function() {
-			sendMessage(this.message);
-			this.message = '';
+			if (this.message != '') {
+				sendMessage(this.message);
+				this.message = '';
+			}
 		},
 		end: function() {
 			this.ended = {
