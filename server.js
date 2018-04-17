@@ -1,6 +1,5 @@
 'use strict';
 
-const session = require('express-session');
 const express = require('express');
 const WebSocket = require('ws');
 
